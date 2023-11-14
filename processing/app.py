@@ -32,13 +32,11 @@ def main():
     for message in pubsub.listen():
         redisDB.publish("backend", "processing")
         channel = message['channel']
-        try:
-            data = loads(str(message['data']))
-        except:
-            print("Couldnt unload message: " + str(message['data']))
+        data = message['data']
+        if type(data) is not str:
+            print("Invalid data type: " + str(type(data)))
             continue
-        if type(data) is int:
-            continue
+        messages.append(message)
         print("Message data: " + str(data))
         videoFile = s3.getVideo(data)
         videoBytes = videoFile["Body"].read()

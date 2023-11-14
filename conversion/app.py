@@ -40,9 +40,9 @@ def main():
         except:
             print("Couldnt unload message: " + str(message['data']))
             continue
-        if type(data) is int:
+        if type(data) is int:        
+            print("Message data: " + str(data))
             continue
-        print("Message data: " + str(data))
         videoFile = getVideo(data) # Get video stored in s3
         videoBytes = videoFile["Body"].read()
         videoMp4 = convert_to_mp4(videoBytes) # Convert video to mp4
