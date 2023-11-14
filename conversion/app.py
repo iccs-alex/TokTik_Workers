@@ -34,11 +34,13 @@ def main():
     pubsub.subscribe(config.REDIS_LISTEN_QUEUE_NAME)
     for message in pubsub.listen():
         redisDB.publish("backend", "converting")
-
         channel = message['channel']
-        data = message['data']
-        if type(data) is not str:
-            print("Invalid data type: " + str(type(data)))
+        try:
+            data = loads(str(message['data']))
+        except:
+            print("Couldnt unload message: " + str(message['data']))
+            continue
+        if type(data) is int:
             continue
         print("Message data: " + str(data))
         videoFile = getVideo(data) # Get video stored in s3

@@ -35,9 +35,12 @@ def main():
     for message in pubsub.listen():
         redisDB.publish("backend", "having thumbnail extracted")
         channel = message['channel']
-        data = message['data']
-        if type(data) is not str:
-            print("Invalid data type: " + str(type(data)))
+        try:
+            data = loads(str(message['data']))
+        except:
+            print("Couldnt unload message: " + str(message['data']))
+            continue
+        if type(data) is int:
             continue
         print("Message data: " + str(data))
         videoFile = getVideo(data)
